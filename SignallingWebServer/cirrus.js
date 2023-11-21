@@ -34,7 +34,8 @@ const defaultConfig = {
 	StreamerPort: 8888,
 	SFUPort: 8889,
 	MaxPlayerCount: -1,
-	DisableSSLCert: true
+	DisableSSLCert: true,
+	Token: null
 };
 
 const argv = require('yargs').argv;
@@ -926,6 +927,22 @@ playerServer.on('connection', function (ws, req) {
 	const urlParams = new URLSearchParams(parsedUrl.search);
 	const whoSendsOffer = urlParams.has('OfferToReceive') && urlParams.get('OfferToReceive') !== 'false' ? WhoSendsOffer.Browser : WhoSendsOffer.Streamer;
 
+        // if a token is defined, require a matching ?t=<TOKEN> in the url
+	if (config.Token) {
+		if (urlParams && urlParams.has('t')) {
+			let token = urlParams.get('t');
+			if (!token || token !== config.Token) {
+				ws.close(1008, 'Not allowed');
+				return;
+			}
+		} else {
+			ws.close(1008, 'Not allowed');
+			return;
+		}
+	}
+
+
+	
 	if (playerCount + 1 > maxPlayerCount && maxPlayerCount !== -1)
 	{
 		console.logColor(logging.Red, `new connection would exceed number of allowed concurrent connections. Max: ${maxPlayerCount}, Current ${playerCount}`);
