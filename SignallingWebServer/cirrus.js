@@ -915,10 +915,12 @@ playerServer.on('connection', function (ws, req) {
 		if (urlParams && urlParams.has('t')) {
 			let token = urlParams.get('t');
 			if (!token || token !== config.Token) {
+				console.error("Incorrect token received");
 				ws.close(1008, 'Not allowed');
 				return;
 			}
 		} else {
+			console.error("No required token received.");
 			ws.close(1008, 'Not allowed');
 			return;
 		}
