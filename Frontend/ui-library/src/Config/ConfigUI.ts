@@ -204,6 +204,10 @@ export class ConfigUI {
         );
         this.addSettingNumeric(
             psSettingsSection,
+            this.numericParametersUi.get(NumericParameters.AFKCountdownSecs)
+        );
+        this.addSettingNumeric(
+            psSettingsSection,
             this.numericParametersUi.get(NumericParameters.MaxReconnectAttempts)
         );
         this.addSettingNumeric(
@@ -242,6 +246,11 @@ export class ConfigUI {
         this.addSettingFlag(
             inputSettingsSection,
             this.flagsUi.get(Flags.MouseInput)
+        );
+
+        this.addSettingFlag(
+            inputSettingsSection,
+            this.flagsUi.get(Flags.FakeMouseWithTouches)
         );
 
         this.addSettingFlag(
