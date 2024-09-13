@@ -530,7 +530,7 @@ function requestStreamerId(streamer) {
 
 	streamer.idTimer = setTimeout(function() {
 		// streamer did not respond in time. give it a legacy id.
-		const newLegacyId = getUniqueLegacyId();
+		const newLegacyId = getUniqueLegacyStreamerId();
 		if (newLegacyId.length == 0) {
 			const error = `Ran out of legacy ids.`;
 			console.error(error);
@@ -730,7 +730,7 @@ function requestSFUStreamerId(sfuPlayer) {
 
 	sfuStreamerComponent.idTimer = setTimeout(function() {
 		// streamer did not respond in time. give it a legacy id.
-		const newLegacyId = getUniqueSFUId();
+		const newLegacyId = getUniqueLegacySFUId();
 		if (newLegacyId.length == 0) {
 			const error = `Ran out of legacy ids.`;
 			console.error(error);
@@ -854,7 +854,7 @@ sfuServer.on('connection', function (ws, req) {
 		}
 	});
 
-	requestStreamerId(playerComponent.getSFUStreamerComponent());
+	requestSFUStreamerId(playerComponent.getSFUStreamerComponent());
 });
 
 let playerCount = 0;
@@ -1045,6 +1045,7 @@ if (config.UseMatchmaker) {
 		message = {
 			type: 'connect',
 			address: typeof serverPublicIp === 'undefined' ? '127.0.0.1' : serverPublicIp,
+			https: config.UseHTTPS,
 			port: config.UseHTTPS ? httpsPort : httpPort,
 			ready: streamers.size > 0,
 			playerConnected: playerConnected
